@@ -1,19 +1,24 @@
 ﻿using Cocona;
 using GitlabActivityExporter.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using NGitLab;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 var builder = CoconaApp.CreateBuilder(args, options =>
 {
     options.EnableConvertOptionNameToLowerCase = true;
 });
 
-// logging
-builder.Logging.AddDebug();
-
 // dependency injection
-builder.Services.AddSingleton(new GitLabClient(builder.Configuration["Server:Host"], builder.Configuration["Server:PrivateToken"]));
+builder.Services.Configure<JsonSerializerOptions>(options =>
+{
+    options.WriteIndented = true;
+    options.Converters.Add(new JsonStringEnumConverter());
+});
+
+builder.Services.AddSingleton(new GitLabClient("https://lab.tog.co.id", "glpat-cyKHXyN2n2G4Etz2zXqz"));
+//builder.Services.AddSingleton(new GitLabClient(builder.Configuration["Server:Host"], builder.Configuration["Server:PrivateToken"]));
 
 var app = builder.Build();
 
