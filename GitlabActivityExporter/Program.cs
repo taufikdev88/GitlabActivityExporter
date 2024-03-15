@@ -1,5 +1,7 @@
 ﻿using Cocona;
 using GitlabActivityExporter.Commands;
+using GitlabActivityExporter.Services;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.DependencyInjection;
 using NGitLab;
 using System.Text.Json;
@@ -17,8 +19,18 @@ builder.Services.Configure<JsonSerializerOptions>(options =>
     options.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.AddSingleton(new GitLabClient("https://lab.tog.co.id", "glpat-cyKHXyN2n2G4Etz2zXqz"));
-//builder.Services.AddSingleton(new GitLabClient(builder.Configuration["Server:Host"], builder.Configuration["Server:PrivateToken"]));
+builder.Services.AddTransient<IDirectoryService, DirectoryService>();
+builder.Services.AddTransient<IConfigurationService, ConfigurationService>();
+builder.Services.AddTransient(sp =>
+{
+    var directoryService = sp.GetRequiredService<IDirectoryService>();
+    return DataProtectionProvider.Create(new DirectoryInfo(directoryService.GetUserDirectoryPath()));
+});
+builder.Services.AddSingleton(sp =>
+{
+    var configProvider = sp.GetRequiredService<IConfigurationService>();
+    return new GitLabClient(configProvider.Get("Host"), configProvider.Get("Token"));
+});
 
 var app = builder.Build();
 
@@ -31,5 +43,10 @@ app.AddSubCommand("activity", x =>
 {
     x.AddCommands<Activity>();
 }).WithDescription("Activities in gitlab");
+
+app.AddSubCommand("config", x =>
+{
+    x.AddCommands<Config>();
+}).WithDescription("App's configuration");
 
 app.Run();

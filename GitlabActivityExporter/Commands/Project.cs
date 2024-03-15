@@ -36,7 +36,8 @@ public class Project(
     }
 
     [Command(Description = "Get Project Detail")]
-    public void Detail(int id)
+    public void Detail(
+        [Option(Description = "Project Id")] int id)
     {
         var project = client.Projects.GetById(id, new SingleProjectQuery
         {

@@ -72,7 +72,7 @@ public class Activity(
             .ThenByDescending(e => e.CreatedAt))
         {
             if (quiet == true)
-                Console.WriteLine($"{commitSummary.CreatedAt:yyyy/MM/ddTHH:mm:sszzz}\t{commitSummary.ProjectName[..8]}\t ({commitSummary.ShortId}) {commitSummary.Title,-72}");
+                Console.WriteLine($"{commitSummary.CreatedAt:yyyy/MM/dd} - {commitSummary.ProjectName} - ({commitSummary.ShortId}) {commitSummary.Title,-72}");
             else
                 Console.WriteLine($"{commitSummary.CreatedAt:yyyy/MM/ddTHH:mm:sszzz}\t{commitSummary.ProjectName,-30} {commitSummary.Ref,-20} ({commitSummary.ShortId}) {commitSummary.Title,-72}");
         }
