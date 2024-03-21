@@ -47,7 +47,7 @@ public class Activity(
                 projectRepos.Add(userEvent.ProjectId, projectRepo);
             }
 
-            if (projectRepo is null)
+            if (projectRepo is null || userEvent.PushData is null)
                 continue;
 
             var commits = projectRepo.GetCommits(userEvent.PushData.Ref, userEvent.PushData.CommitCount);

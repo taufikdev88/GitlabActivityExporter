@@ -2,6 +2,7 @@
   "profiles": {
     "GitlabActivityExporter": {
       "commandName": "Project",
+      "commandLineArgs": "activity",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
