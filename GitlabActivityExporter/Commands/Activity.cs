@@ -38,7 +38,7 @@ public class Activity(
                 {
                     Statistics = false
                 });
-                projectName = project.Name;
+                projectName = project.NameWithNamespace;
                 projectNames.Add(userEvent.ProjectId, projectName);
             }
             if (!projectRepos.TryGetValue(userEvent.ProjectId, out var projectRepo))
