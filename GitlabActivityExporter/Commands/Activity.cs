@@ -80,7 +80,7 @@ public class Activity(
             var commitRequest = new GetCommitsRequest
             {
                 RefName = eventSummary.Ref,
-                Since = eventSummary.CreatedAt
+                Since = eventSummary.CreatedAt.AddMinutes(-1)
             };
             var commits = projectRepo.GetCommits(commitRequest);
 
